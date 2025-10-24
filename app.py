@@ -3,20 +3,20 @@ import pandas as pd
 import joblib
 import pickle
 import numpy as np
-import zipfile  # <-- NEW: Import the zipfile library
-import io       # <-- NEW: Needed to read the file in memory
+import zipfile  # <-- Make sure this import is at the top
+import io       # <-- Make sure this import is at the top
 
 # --- 1. SET UP PAGE CONFIGURATION ---
 st.set_page_config(page_title="Crop Yield Predictor", page_icon="🌾", layout="centered")
 
-# --- 2. LOAD SAVED MODEL AND ENCODERS ---
+# --- 2. DEFINE FILE PATHS ---
 MODEL_PATH = "crop_yield_model_specialized_v2.pkl"
 ENCODERS_PATH = "encoders_specialized_v2.pkl"
 
-# --- NEW: Update these two names ---
-# 1. The exact name of the zip file you uploaded to GitHub
-DATA_ZIP_PATH = "India Agriculture Crop Production dataset.zip" # Or whatever you named it
-# 2. The exact name of the CSV file *inside* that zip file
+# --- THIS IS THE FIX ---
+# 1. The exact name of the zip file you uploaded (from your screenshot)
+DATA_ZIP_PATH = "India Agriculture Crop Production dataset.zip" 
+# 2. The exact name of the CSV file *inside* that zip file (from your screenshot)
 DATA_CSV_NAME = "India Agriculture Crop Production dataset/India Agriculture Crop Production.csv"
 # ------------------------------------
 
@@ -40,7 +40,7 @@ def load_artifacts():
         return None, None, None, None
         
     try:
-        # --- NEW: Read from the zip file ---
+        # --- Read from the zip file ---
         with zipfile.ZipFile(DATA_ZIP_PATH, 'r') as z:
             # Open the CSV file from within the zip
             with z.open(DATA_CSV_NAME) as f:
@@ -53,7 +53,6 @@ def load_artifacts():
     except KeyError:
         st.error(f"Error: Could not find file '{DATA_CSV_NAME}' inside the zip.")
         return None, None, None, None
-    # ------------------------------------
     
     # Extract encoders
     enc_state = encoders["state"]
@@ -74,72 +73,6 @@ def load_artifacts():
                      'Guar seed', 'Sesamum', 'other oilseeds', 'Niger seed', 'Turmeric', 
                      'Tobacco', 'Dry chillies', 'Jute', 'Peas & beans (Pulses)', 
                      'Cotton(lint)', 'Mesta', 'Rice'] 
-
-    return model, enc_state, enc_district, enc_crop, enc_season, df_raw, states, seasons, crops, yield_cutoff, outlier_crops
-
-# (The rest of your app.py code stays exactly the same)
-# ...
-import streamlit as st
-import pandas as pd
-import joblib
-import pickle
-import numpy as np
-
-# --- 1. SET UP PAGE CONFIGURATION ---
-# Set the page title and icon
-st.set_page_config(page_title="Crop Yield Predictor", page_icon="🌾", layout="centered")
-
-# --- 2. LOAD SAVED MODEL AND ENCODERS ---
-MODEL_PATH = "crop_yield_model_specialized_v2.pkl"
-ENCODERS_PATH = "encoders_specialized_v2.pkl"
-DATA_PATH = "India Agriculture Crop Production.csv" # Need this for dropdowns
-
-# Use st.cache_resource to load these only once
-@st.cache_resource
-def load_artifacts():
-    """
-    Loads the saved model, encoders, and raw data.
-    """
-    try:
-        model = joblib.load(MODEL_PATH)
-    except FileNotFoundError:
-        st.error(f"Error: Model file not found at {MODEL_PATH}")
-        return None, None, None, None
-    
-    try:
-        with open(ENCODERS_PATH, "rb") as f:
-            encoders = pickle.load(f)
-    except FileNotFoundError:
-        st.error(f"Error: Encoders file not found at {ENCODERS_PATH}")
-        return None, None, None, None
-        
-    try:
-        df_raw = pd.read_csv(DATA_PATH)
-        df_raw = df_raw.rename(columns=lambda x: x.strip())
-    except FileNotFoundError:
-        st.error(f"Error: Data file not found at {DATA_PATH}")
-        return None, None, None, None
-    
-    # Extract encoders
-    enc_state = encoders["state"]
-    enc_district = encoders["district"]
-    enc_crop = encoders["crop"]
-    enc_season = encoders["season"]
-    
-    # Get lists for dropdowns
-    states = sorted(list(enc_state.classes_))
-    seasons = sorted(list(enc_season.classes_))
-    crops = sorted(list(enc_crop.classes_))
-    
-    # Get the yield cutoff and outlier crops info from the model/data
-    # This is for the warning message
-    yield_cutoff = 25.67 # Hardcoding the value from your notebook
-    outlier_crops = ['Coconut', 'Sugarcane', 'Banana', 'Onion', 'Sweet potato', 
-                     'Potato', 'Tapioca', 'Sunflower', 'Sannhamp', 'Arhar/Tur', 
-                     'Ginger', 'Other Rabi pulses', 'Cashewnut', 'Maize', 'Groundnut', 
-                     'Guar seed', 'Sesamum', 'other oilseeds', 'Niger seed', 'Turmeric', 
-                     'Tobacco', 'Dry chillies', 'Jute', 'Peas & beans (Pulses)', 
-                     'Cotton(lint)', 'Mesta', 'Rice'] # From notebook output
 
     return model, enc_state, enc_district, enc_crop, enc_season, df_raw, states, seasons, crops, yield_cutoff, outlier_crops
 
@@ -254,5 +187,4 @@ if model is not None: # Only run if models loaded successfully
         else:
             st.error("Please fill in all the fields.")
 else:
-
     st.error("Model artifacts could not be loaded. The app cannot run.")
