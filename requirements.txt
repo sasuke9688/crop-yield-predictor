@@ -1,6 +1,7 @@
 pandas
-scikit-learn # Use the same version you trained with
+scikit-learn==1.2.2 # Use the same version you trained with
 streamlit
 joblib
 
 numpy
+
