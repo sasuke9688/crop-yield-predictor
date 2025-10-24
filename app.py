@@ -17,7 +17,7 @@ ENCODERS_PATH = "encoders_specialized_v2.pkl"
 # 1. The exact name of the zip file you uploaded to GitHub
 DATA_ZIP_PATH = "India Agriculture Crop Production dataset.zip" # Or whatever you named it
 # 2. The exact name of the CSV file *inside* that zip file
-DATA_CSV_NAME = "India Agriculture Crop Production.csv" 
+DATA_CSV_NAME = "India Agriculture Crop Production dataset/India Agriculture Crop Production.csv"
 # ------------------------------------
 
 # Use st.cache_resource to load these only once
@@ -254,4 +254,5 @@ if model is not None: # Only run if models loaded successfully
         else:
             st.error("Please fill in all the fields.")
 else:
+
     st.error("Model artifacts could not be loaded. The app cannot run.")
