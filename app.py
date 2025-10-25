@@ -7,7 +7,7 @@ import zipfile  # <-- Make sure this import is at the top
 import io       # <-- Make sure this import is at the top
 
 # --- 1. SET UP PAGE CONFIGURATION ---
-st.set_page_config(page_title="Crop Yield Predictor", page_icon="🌾", layout="centered")
+st.set_page_config(page_title="SMARTFARM: Irrigation and Yield guide", page_icon="🌾", layout="centered")
 
 # --- 2. DEFINE FILE PATHS ---
 MODEL_PATH = "crop_yield_model_specialized_v2.pkl"
@@ -188,4 +188,5 @@ if model is not None: # Only run if models loaded successfully
             st.error("Please fill in all the fields.")
 else:
     st.error("Model artifacts could not be loaded. The app cannot run.")
+
 
