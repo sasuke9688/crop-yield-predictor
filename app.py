@@ -7,20 +7,19 @@ import zipfile  # <-- Make sure this import is at the top
 import io       # <-- Make sure this import is at the top
 
 # --- 1. SET UP PAGE CONFIGURATION ---
+# --- THIS IS THE MODIFIED LINE ---
 st.set_page_config(page_title="SMARTFARM: Irrigation and Yield guide", page_icon="🌾", layout="centered")
 
 # --- 2. DEFINE FILE PATHS ---
 MODEL_PATH = "crop_yield_model_specialized_v2.pkl"
 ENCODERS_PATH = "encoders_specialized_v2.pkl"
 
-# --- THIS IS THE FIX ---
-# 1. The exact name of the zip file you uploaded (from your screenshot)
+# 1. The exact name of the zip file you uploaded
 DATA_ZIP_PATH = "India Agriculture Crop Production dataset.zip" 
-# 2. The exact name of the CSV file *inside* that zip file (from your screenshot)
-DATA_CSV_NAME = "India Agriculture Crop Production.csv" 
+# 2. The exact name of the CSV file *inside* that zip file
+DATA_CSV_NAME = "India Agriculture Crop Production dataset/India Agriculture Crop Production.csv"
 # ------------------------------------
 
-# Use st.cache_resource to load these only once
 @st.cache_resource
 def load_artifacts():
     """
@@ -188,6 +187,3 @@ if model is not None: # Only run if models loaded successfully
             st.error("Please fill in all the fields.")
 else:
     st.error("Model artifacts could not be loaded. The app cannot run.")
-
-
-
