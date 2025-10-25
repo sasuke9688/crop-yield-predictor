@@ -90,7 +90,7 @@ crop_water = {
 
 # --- 4. BUILD THE USER INTERFACE (UI) ---
 
-st.title("🌾 India Crop Yield Predictor")
+st.title("🌾 SMARTFARM: Irrigation and Yield guide")
 st.markdown("Select your location, crop, and area to get a yield prediction.")
 
 if model is not None: # Only run if models loaded successfully
@@ -187,4 +187,5 @@ if model is not None: # Only run if models loaded successfully
             st.error("Please fill in all the fields.")
 else:
     st.error("Model artifacts could not be loaded. The app cannot run.")
+
 
